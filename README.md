@@ -13,7 +13,7 @@ This repo is for reporting issues with the paid Vendure Plus plugins:
    ```
 2. Log in to the Vendure package registry using the credentials provided when you purchased your license
    ```bash
-   npm login --registry=https://registry.vendure.io
+   npm login --registry=https://registry.vendure.io --auth-type=legacy
    ```
 3. If not already done, install the ui-devkit package
    ```bash
