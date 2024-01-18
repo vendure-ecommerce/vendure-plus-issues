@@ -20,12 +20,15 @@ This repo is for reporting issues with the paid Vendure Plus plugins:
    ```bash
    npm install @vendure/ui-devkit
    ```
+4. Find your npm auth token for the Vendure registry. This can be found in the `.npmrc` in your home directory (`~/.npmrc` on Linux or MacOS, `C:\Users\<username>\.npmrc` on Windows). Assuming you have successfully logged in as in step 2 above, you should see a line like this in you npmrc file:
+   ```
+   //registry.vendure.io/:_authToken="<auth token string>"
+   ```
+   The `<auth token string>` will be needed for when you want to install dependencies on other computers withour requiring a manual login each time, such as in CI. This is covered in the next section.
 
 ## Installing in CI
 
-In your CI workflows, you'll need to let the npm client know how to access packages in the `@vendure-plus` organization. 
-
-This is covered in the npm docs [Using private packages in a CI/CD workflow](https://docs.npmjs.com/using-private-packages-in-a-ci-cd-workflow).
+In your CI workflows, you'll need to let the npm client know how to access packages in the `@vendure-plus` organization. To do so, you'll need the auth token you located in step 4 above, and you'll need to add that to a project-specific `.npmrc` file.
 
 An example implementation involves creating a script which is called in CI which can set up a project-specific `.npmrc` file:
 
@@ -43,7 +46,7 @@ fs.writeFileSync(npmRcFilePath, fileContents.join('\n'), 'utf-8');
 console.log(`Generated .npmrc file "${npmRcFilePath}" for access to @vendure-plus registry:`);
 ```
 
-The value of `VENDURE_PLUS_AUTH_TOKEN` can be found in your local `~/.npmrc` file after logging in following the instructions above. It should then be stored using your CI secrets config, e.g. in GitHub Actions it would be set here:
+The value of `VENDURE_PLUS_AUTH_TOKEN` is the token from your `~/.npmrc` file as explained in step 4 above. It should then be stored using your CI secrets config, e.g. in GitHub Actions it would be set here:
 
 ![image](https://user-images.githubusercontent.com/6275952/228183492-6c43f179-8e84-40d4-9055-b26353a2720f.png)
 
@@ -56,3 +59,5 @@ Then in your workflow config, you'd have a step like this:
     env:
       VENDURE_PLUS_AUTH_TOKEN: ${{ secrets.VENDURE_PLUS_AUTH_TOKEN }}
 ```
+
+More information on this process can be found in the npm docs [Using private packages in a CI/CD workflow](https://docs.npmjs.com/using-private-packages-in-a-ci-cd-workflow).
